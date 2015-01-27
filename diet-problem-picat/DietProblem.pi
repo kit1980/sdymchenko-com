@@ -1,5 +1,3 @@
-% http://sdymchenko.com/blog/2014/11/05/diet-problem-picat/
-
 import mip.
 
 main =>
