@@ -1,0 +1,28 @@
+% Short Deadfish Numbers
+% http://codegolf.stackexchange.com/questions/40124/short-deadfish-numbers/
+% Picat 0.8 - http://picat-lang.org
+
+import planner.
+
+final((N, N)) => true.
+
+action((N, A), NewState, Action, Cost) ?=>
+    NewState = (N, A + 1),
+    Action = i,
+    Cost = 1.
+action((N, A), NewState, Action, Cost) ?=>
+    A != 16,
+    A < N,
+    NewState = (N, A * A),
+    Action = s,
+    Cost = 1.
+action((N, A), NewState, Action, Cost) ?=>
+    A > 0,
+    NewState = (N, A - 1),
+    Action = d,
+    Cost = 1.
+
+main([X]) =>
+    N = X.to_integer(),
+    best_plan((N, 0), Plan),
+    printf("%w\n", Plan ++ [o]).
