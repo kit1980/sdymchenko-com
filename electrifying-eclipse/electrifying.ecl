@@ -1,3 +1,7 @@
+% ECLiPSe 6.1 #196 - http://www.eclipseclp.org/
+% Usage:
+% eclipse -b electrifying.ecl -e main
+
 :- lib(ic).
 :- lib(branch_and_bound).
 
