@@ -1,3 +1,6 @@
+% Electrifying
+% http://puzzlor.com/2014-12_Electrifying.html
+%
 % ECLiPSe 6.1 #196 - http://www.eclipseclp.org/
 % Usage:
 % eclipse -b electrifying.ecl -e main
