@@ -1,0 +1,63 @@
+% Pentagonal Peg Solitare
+% http://blogs.sas.com/content/operations/2015/03/11/how-to-solve-puzzles-peg-solitaire-with-optimization
+% Picat 0.9 - http://picat-lang.org
+
+import planner.
+
+index (+,-,-) (-,-,+)
+move(h, m, o).
+move(h, i, k).
+move(h, e, b).
+move(h, f, c).
+move(h, j, l).
+move(m, i, d).
+move(m, j, g).
+move(i, m, p).
+move(i, e, a).
+move(e, i, n).
+move(e, f, g).
+move(f, e, d).
+move(f, j, p).
+move(j, m, n).
+move(j, f, a).
+move(n, k, d).
+move(n, o, p).
+move(d, b, a).
+move(a, c, g).
+move(g, l, p).
+
+final(Pegs) =>
+    foreach(Char in Pegs.keys())
+        if Char == h then
+            Pegs.get(Char) == 1
+        else
+            Pegs.get(Char) = 0
+        end
+    end.
+
+action(Pegs, NewPegs, Action, Cost) ?=>
+    member(End, Pegs.keys()),
+    Pegs.get(End) == 0,
+    ( move(Begin, Middle, End) ; move(End, Middle, Begin) ),
+    Pegs.get(Begin) == 1, Pegs.get(Middle) == 1,
+    NewPegs = copy_term(Pegs),
+    NewPegs.put(Begin, 0),
+    NewPegs.put(Middle, 0),
+    NewPegs.put(End, 1),
+    Action = [Begin, ' ', Middle, ' ', End],
+    Cost = 1.
+
+main =>
+    Pegs = new_map(),
+    foreach(I in 0'a..0'p)
+        Char = chr(I),
+        if Char == h then
+            Pegs.put(Char, 0)
+        else
+            Pegs.put(Char, 1)
+        end
+    end,
+    plan(Pegs, Plan),
+    foreach(Move in Plan)
+         println(Move)
+    end.
