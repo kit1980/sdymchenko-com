@@ -3,7 +3,7 @@
 %
 % ECLiPSe 6.1 #199 - http://www.eclipseclp.org/
 % Usage:
-% eclipse -b electrifying.ecl -e main
+% eclipse -b snake.ecl -e main
 
 :- lib(ic).
 puzzle(A + 13 * B / C +
