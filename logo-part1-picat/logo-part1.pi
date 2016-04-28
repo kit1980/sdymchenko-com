@@ -1,0 +1,71 @@
+import planner.
+import util.
+
+prev('.') = '.'.
+prev('2') = '1'.
+prev('3') = '2'.
+prev('4') = '3'.
+prev('1') = '4'.
+
+final(Board) =>
+    MaxR = Board.length(),
+    MaxC = Board[1].length(),
+    foreach (R in 1..MaxR, C in 1..MaxC)
+        Board[R, C] == '.'
+    end.
+
+action(Board, NewBoard, Action, Cost) =>
+    MaxR = Board.length(),
+    MaxC = Board[1].length(),
+    between(1, MaxR, R),
+    between(1, MaxC, C),
+    Board[R, C] == '1',
+    NewBoard = copy_term(Board),
+    NewBoard[R, C] := '.',
+    foreach ((DR, DC) in [(0, 1), (0, -1), (1, 0), (-1, 0)])
+        NR = R + DR, NC = C + DC,
+        if (NR > 0, NR <= MaxR, NC > 0, NC <= MaxC) then
+            NewBoard[NR, NC] := prev(NewBoard[NR, NC])
+        end
+    end,
+    Action = (R, C),
+    Cost = 1.
+
+moves(Plan) = Keys =>
+    (R, C) = (1, 1),
+    Keys = [],
+    foreach ((NewR, NewC) in Plan)
+        if NewR > R then
+            foreach (I in 1 .. NewR - R)
+                Keys := ["a"|Keys]
+            end
+        else
+            foreach (I in 1 .. R - NewR)
+                Keys := ["q"|Keys]
+            end
+        end,
+        if NewC > C then
+            foreach (I in 1 .. NewC - C)
+                Keys := ["p"|Keys]
+            end
+        else
+            foreach (I in 1 .. C - NewC)
+                Keys := ["o"|Keys]
+            end
+       end,
+       Keys := ["space"|Keys],
+       R := NewR, C := NewC,
+    end,
+    Keys := join(reverse(Keys)).
+
+main =>
+    MaxR = read_int(), MaxC = read_int(),
+    Board = new_array(MaxR, MaxC),
+    foreach (R in 1..MaxR)
+        Line = read_line(),
+        foreach (C in 1..MaxC)
+           Board[R, C] = Line[C]
+        end
+    end,
+    plan(Board, MaxR * MaxC, Plan),
+    println(moves(reverse(Plan))).
