@@ -36,9 +36,9 @@ def do_level(level):
              (32, 252, 32)    : '2',
              (252, 32, 252)  : '3',
              (252, 252, 32)  : '4'}
+        empty = True
         with open(txt, 'w') as txt_file:
             print>>txt_file, 6, 10
-            emtpy = True
             with Image.open(png).convert("RGB") as im:
                 bg = im.getpixel((200, 136))
                 for y in range(168, 208 + 1, 8):
