@@ -40,12 +40,11 @@ def do_level(level):
         with open(txt, 'w') as txt_file:
             print>>txt_file, 6, 10
             with Image.open(png).convert("RGB") as im:
-                bg = im.getpixel((200, 136))
                 for y in range(168, 208 + 1, 8):
                     row = ""
                     for x in range(54, 126 + 1, 8):
                         p = im.getpixel((x, y))
-                        if (p != bg or im.getpixel((x -3, y + 6)) != bg) and p in C:
+                        if (p != im.getpixel((x - 3, y + 6))) and p in C:
                             row += C[p]
                             empty = False
                         else:
