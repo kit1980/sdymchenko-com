@@ -17,8 +17,11 @@ final(Board) =>
 action(Board, NewBoard, Action, Cost) =>
     MaxR = Board.length(),
     MaxC = Board[1].length(),
-    between(1, MaxR, R),
-    between(1, MaxC, C),
+    % between(1, MaxR, R),
+    % between(1, MaxC, C),
+    member(R, MaxR..-1..1),
+    member(C, MaxC..-1..1),
+
     Board[R, C] == '1',
     NewBoard = copy_term(Board),
     NewBoard[R, C] := '.',
@@ -53,10 +56,10 @@ moves(Plan) = Keys =>
                 Keys := ["o"|Keys]
             end
        end,
-       Keys := ["space"|Keys],
+       Keys := ["z"| Keys],
        R := NewR, C := NewC,
     end,
-    Keys := join(reverse(Keys)).
+    Keys := join(reverse(Keys), '').
 
 main =>
     MaxR = read_int(), MaxC = read_int(),
@@ -68,4 +71,7 @@ main =>
         end
     end,
     plan(Board, MaxR * MaxC, Plan),
-    println(moves(reverse(Plan))).
+%    print(moves(reverse(Plan))).
+    foreach ((R, C) in Plan)
+        printf("%d %d%n", R, C)
+    end.
