@@ -37,7 +37,7 @@ def start_game():
 
     text("5")
 
-#    text("6")
+    # text("6")
     # sleep(1)
     # text("love")
     # sleep(1)

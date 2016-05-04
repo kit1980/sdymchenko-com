@@ -17,10 +17,8 @@ final(Board) =>
 action(Board, NewBoard, Action, Cost) =>
     MaxR = Board.length(),
     MaxC = Board[1].length(),
-    % between(1, MaxR, R),
-    % between(1, MaxC, C),
-    member(R, MaxR..-1..1),
-    member(C, MaxC..-1..1),
+    between(1, MaxR, R),
+    between(1, MaxC, C),
 
     Board[R, C] == '1',
     NewBoard = copy_term(Board),
@@ -70,7 +68,7 @@ main =>
            Board[R, C] = Line[C]
         end
     end,
-    plan(Board, MaxR * MaxC, Plan),
+    plan_unbounded(Board, MaxR * MaxC, Plan),
 %    print(moves(reverse(Plan))).
     foreach ((R, C) in Plan)
         printf("%d %d%n", R, C)
