@@ -6,9 +6,9 @@ import subprocess
 import filecmp
 
 def key(k):
-    system("xdotool search --class Fuse windowactivate key --delay 240 %s" % k)
+    system("xdotool search --class Fuse windowactivate key --delay 250 %s" % k)
 def text(t):
-    system("xdotool type --delay 350 %s" % t)
+    system("xdotool type --delay 340 %s" % t)
 
 def start_game():
 #    system("fuse-sdl --no-sound --tape /opt/files/emu/zx/LOGO.TAP &")
@@ -21,11 +21,11 @@ def start_game():
 
     text("5")
 
-    # text("6")
-    # sleep(1)
-    # text("love")
-    # sleep(1)
-    # key("KP_Enter")
+    text("6")
+    sleep(1)
+    text("love")
+    sleep(1)
+    key("KP_Enter")
 
     text("7")
 
@@ -106,7 +106,6 @@ def do_level(level):
             text(keys)
             curr_r, curr_c = current_position()
             if (c, r) == (curr_c, curr_r):
-                key("space")
                 key("space")
                 break
 
