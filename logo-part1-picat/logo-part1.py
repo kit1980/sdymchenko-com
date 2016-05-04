@@ -6,34 +6,18 @@ import subprocess
 import filecmp
 
 def key(k):
-    # png = "/tmp/logo-tmp.png"
-    # system('import -window "$(xdotool getwindowfocus -f)" ' + png)
     system("xdotool search --class Fuse windowactivate key --delay 240 %s" % k)
-    sleep(0.0)
 def text(t):
     system("xdotool type --delay 350 %s" % t)
-    # for c in t:
-    #     key(c)
 
 def start_game():
 #    system("fuse-sdl --no-sound --tape /opt/files/emu/zx/LOGO.TAP &")
     system("/home/kit/build/fuse-1.1.1/fuse --no-sound --tape /opt/files/emu/zx/LOGO.TAP &")
-#    system("xspect -no-sound -scale 1 -load-immed -quick-load -tap /opt/files/emu/zx/LOGO.TAP &")
-
-    # sleep(2)
-    # system('recordmydesktop --windowid="$(xdotool getwindowfocus -f)" --no-sound')
-    # sleep(2)
-
-    system('xdotool search --class Fuse windowactivate')
 
     sleep(6)
     key("space")
     sleep(2)
     text("2")
-    text("4")
-    sleep(1)
-    text("qaopzxcv")
-    sleep(1)
 
     text("5")
 
@@ -42,7 +26,6 @@ def start_game():
     # text("love")
     # sleep(1)
     # key("KP_Enter")
-
 
     text("7")
 
@@ -104,7 +87,7 @@ def do_level(level):
                     print>>txt_file, row
         if good and not empty and (level == 1 or not filecmp.cmp(txt, txt_prev)):
             break
-#        sleep(0.5)
+        sleep(0.5)
 
     plan = subprocess.check_output("picat logo-part1.pi <" + txt, shell=True)
     curr_r, curr_c = 1, 1
@@ -123,7 +106,8 @@ def do_level(level):
             text(keys)
             curr_r, curr_c = current_position()
             if (c, r) == (curr_c, curr_r):
-                text("zz")
+                key("space")
+                key("space")
                 break
 
 
@@ -136,15 +120,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# text("pppp")
-# text("a")
-# key("space")
-# text("aa")
-# key("space")
-# text("qo")
-# key("space")
-# text("pp")
-# key("space")
-# text("o")
-# key("space")
