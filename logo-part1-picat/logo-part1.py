@@ -6,13 +6,22 @@ import subprocess
 import filecmp
 
 def key(k):
-    system("xdotool search --class Fuse windowactivate key --delay 250 %s" % k)
+    system("xdotool search --class Fuse windowactivate key --delay 290 %s" % k)
 def text(t):
     system("xdotool type --delay 340 %s" % t)
 
 def start_game():
-#    system("fuse-sdl --no-sound --tape /opt/files/emu/zx/LOGO.TAP &")
-    system("/home/kit/build/fuse-1.1.1/fuse --no-sound --tape /opt/files/emu/zx/LOGO.TAP &")
+    system("fuse-sdl --tape /opt/files/emu/zx/LOGO.TAP &")
+
+    # Record movie to logo1.fmf.
+    # Convert to MOV with from command-line:
+    # fmfconv -p youtube logo1.fmf logo1.mov
+    sleep(2)
+    key("F1")
+    text("fmr")
+    key("Tab")
+    text("logo1.fmf")
+    key("KP_Enter")
 
     sleep(6)
     key("space")
@@ -21,11 +30,11 @@ def start_game():
 
     text("5")
 
-    text("6")
-    sleep(1)
-    text("love")
-    sleep(1)
-    key("KP_Enter")
+    # text("6")
+    # sleep(1)
+    # text("love")
+    # sleep(1)
+    # key("KP_Enter")
 
     text("7")
 
@@ -59,10 +68,10 @@ def do_level(level):
 
     while True:
         system('import -window "$(xdotool search --class Fuse)" ' + png)
-        C = {(255, 0, 0)    : '1',
-             (0, 255, 0)    : '2',
-             (255, 0, 255)  : '3',
-             (255, 255, 0)  : '4'}
+        C = {(248, 0, 0)    : '1',
+             (0, 252, 0)    : '2',
+             (248, 0, 248)  : '3',
+             (248, 252, 0)  : '4'}
         empty = True
         with open(txt, 'w') as txt_file:
             print>>txt_file, 6, 10
@@ -112,10 +121,14 @@ def do_level(level):
 
 def main():
     start_game()
-    level = 1
-    while True:
+    for level in range(1, 100 + 1):
         do_level(level)
-        level += 1
+    sleep(10)
+    # Stop movie recording and exit.
+    key("F1")
+    text("fms")
+    key("F1")
+    text("fx")
 
 if __name__ == "__main__":
     main()
