@@ -11,17 +11,9 @@ def text(t):
     system("xdotool type --delay 340 %s" % t)
 
 def start_game():
-    system("fuse-sdl --tape /opt/files/emu/zx/LOGO.TAP &")
-
-    # Record movie to logo1.fmf.
-    # Convert to MOV with from command-line:
-    # fmfconv -p youtube logo1.fmf logo1.mov
-    sleep(2)
-    key("F1")
-    text("fmr")
-    key("Tab")
-    text("logo1.fmf")
-    key("KP_Enter")
+    system("fuse-sdl --no-sound --tape /opt/files/emu/zx/LOGO.TAP --movie-start logo1.fmf &")
+    # convert FMF to MPEG from command-line:
+    # fmfconv -p dvd logo1.fmf logo1.mpeg
 
     sleep(6)
     key("space")
