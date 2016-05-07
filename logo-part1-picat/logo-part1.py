@@ -6,7 +6,7 @@ import subprocess
 import filecmp
 
 def key(k):
-    system("xdotool search --class Fuse windowactivate key --delay 290 %s" % k)
+    system("xdotool key --delay 290 %s" % k)
 def text(t):
     system("xdotool type --delay 340 %s" % t)
 
@@ -18,22 +18,22 @@ def start_game():
     sleep(6)
     key("space")
     sleep(2)
-    text("2")
+    key("2")
 
-    text("5")
+    key("5")
 
-    # text("6")
+    # key("6")
     # sleep(1)
     # text("love")
-    # sleep(1)
-    # key("KP_Enter")
 
-    text("7")
+    sleep(1)
+    key("KP_Enter")
+
+    key("7")
 
     sleep(1)
     text("picat")
     key("KP_Enter")
-    sleep(3)
 
 def current_position():
     png = "/tmp/logo-tmp.png"
@@ -57,22 +57,22 @@ def do_level(level):
     png = "/tmp/logo%d.png" % level
     txt = "/tmp/logo%d.txt" % level
     txt_prev = "/tmp/logo%d.txt" % (level - 1)
+    C = {(248, 0, 0)    : '1',
+         (0, 252, 0)    : '2',
+         (248, 0, 248)  : '3',
+         (248, 252, 0)  : '4'}
 
     while True:
         system('import -window "$(xdotool search --class Fuse)" ' + png)
-        C = {(248, 0, 0)    : '1',
-             (0, 252, 0)    : '2',
-             (248, 0, 248)  : '3',
-             (248, 252, 0)  : '4'}
         empty = True
         with open(txt, 'w') as txt_file:
             print>>txt_file, 6, 10
             with Image.open(png).convert("RGB") as im:
                 good = False
-                x, y = 48, 40
+                x, y = 48, 200
                 color = im.getpixel((x, y))
-                for dx in range(6):
-                    for dy in range(6):
+                for dx in range(7 + 1):
+                    for dy in range(7 + 1):
                         if im.getpixel((x + dx, y + dy)) != color:
                             good = True
                             break
