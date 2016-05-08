@@ -9,6 +9,7 @@ def key(k):
 def text(t):
     system("xdotool type --delay 340 %s" % t)
 
+
 def load_ppm(ppm):
     with open(ppm, 'rb') as ppm_file:
         magic = ppm_file.loadline().strip()
@@ -107,7 +108,7 @@ def do_level(level):
             break
         sleep(0.5)
 
-    plan = subprocess.check_output("picat logo-part1.pi <" + txt, shell=True)
+    plan = subprocess.check_output("picat logo.pi <" + txt, shell=True)
     curr_r, curr_c = 1, 1
     for move in plan.strip().split("\n")[::-1]:
         r, c = map(int, move.split())
@@ -130,6 +131,7 @@ def do_level(level):
 
 def main():
     start_game()
+
     for level in range(1, 100 + 1):
         do_level(level)
     sleep(10)
