@@ -12,9 +12,9 @@ def text(t):
 
 def load_ppm(ppm):
     with open(ppm, 'rb') as ppm_file:
-        magic = ppm_file.loadline().strip()
-        w, h = map(int, ppm_file.loadline().split())
-        max_colors = int(ppm_file.loadline())
+        magic = ppm_file.readline().strip()
+        w, h = map(int, ppm_file.readline().split())
+        max_colors = int(ppm_file.readline())
         pixels = {}
         for x in range(w):
             pixels[x] = {}
@@ -22,9 +22,9 @@ def load_ppm(ppm):
                 pixels[x][y] = ''
         for y in range(h):
             for x in range(w):
-                R = ord(ppm_file.load(1))
-                G = ord(ppm_file.load(1))
-                B = ord(ppm_file.load(1))
+                R = ord(ppm_file.read(1))
+                G = ord(ppm_file.read(1))
+                B = ord(ppm_file.read(1))
                 pixels[x][y] = (R, G, B)
     return pixels
 
@@ -81,11 +81,9 @@ def do_level(level):
 
     while True:
         system('import -window "$(xdotool search --class Fuse)" -depth 8 ' + ppm)
-        empty = True
         with open(txt, 'w') as txt_file:
             print>>txt_file, 6, 10
             im = load_ppm(ppm)
-            print im
             good = False
             x, y = 48, 200
             color = im[x][y]
@@ -104,13 +102,13 @@ def do_level(level):
                     else:
                         row += '.'
                 print>>txt_file, row
-        if good and not empty and (level == 1 or not filecmp.cmp(txt, txt_prev)):
+        if good and (level == 1 or not filecmp.cmp(txt, txt_prev)):
             break
         sleep(0.5)
 
     plan = subprocess.check_output("picat logo.pi <" + txt, shell=True)
     curr_r, curr_c = 1, 1
-    for move in plan.strip().split("\n")[::-1]:
+    for move in plan.strip().split("\n"):
         r, c = map(int, move.split())
         while True:
             keys = ""
