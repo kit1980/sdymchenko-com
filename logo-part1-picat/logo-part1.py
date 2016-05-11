@@ -98,7 +98,6 @@ def do_level(level):
                     p = im[x][y]
                     if p != im[x - 3][y + 6] and p in C:
                         row += C[p]
-                        empty = False
                     else:
                         row += '.'
                 print>>txt_file, row

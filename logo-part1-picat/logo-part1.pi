@@ -1,0 +1,176 @@
+import planner.
+import util. % for split
+
+color_tile((248, 0, 0))   = '1'.
+color_tile((0, 252, 0))   = '2'.
+color_tile((248, 0, 248)) = '3'.
+color_tile((248, 252, 0)) = '4'.
+
+load_game =>
+    0 = command("fuse-sdl --no-sound --tape /opt/files/emu/zx/LOGO.TAP --movie-start logo-part1.fmf &").
+    % to convert FMF to MPEG from command-line: fmfconv -p dvd logo-part1.fmf logo-part1.mpeg
+
+key(K) =>
+    _ = command("xdotool key --delay 290 " ++ K).
+text(T) =>
+    _ = command("xdotool type --delay 430 " ++ T).
+
+sleep(Time) =>
+    _ = command("sleep " ++ to_string(Time)).
+
+ppm_name(Level)=PPM =>
+    PPM = "/tmp/logo" ++ to_string(Level) ++ ".ppm".
+
+
+load_ppm(PPM)=Im =>
+    File = open(PPM),
+    _Magic = read_line(File),
+    [W, H] = [to_int(X) : X in read_line(File).split()],
+    _MaxColors = to_int(read_line(File)),
+    Im = new_array(W, H),
+    foreach (Y in 1..H, X in 1..W)
+        R = read_byte(File),
+        G = read_byte(File),
+        B = read_byte(File),
+        Im[X, Y] = (R, G, B)
+    end,
+    close(File).
+get_pixel(Im, X, Y)=Pixel =>
+    Pixel = Im[X + 1, Y + 1].
+
+start_game =>
+    sleep(6),
+    key("space"),
+    sleep(2),
+    key("2"),
+    key("5"),
+
+    key("6"),
+    sleep(1),
+    text("love"),
+
+    sleep(1),
+    key("KP_Enter"),
+    key("7"),
+    sleep(1),
+    text("picat"),
+    key("KP_Enter").
+
+exit_game =>
+    sleep(10),
+    % Stop movie recording and exit.
+    key("F1"),
+    text("fms"),
+    key("F1"),
+    text("fx").
+
+save_screenshot(PPM) =>
+    _ = command("import -window \"$(xdotool search --class Fuse)\" -depth 8 " ++ to_string(PPM)).
+
+between_levels(Im) =>
+    % check it's not in transition between levels
+    (X, Y) = (48, 200),
+    Color = get_pixel(Im, X, Y),
+    foreach (Dx in 0..7, Dy in 0..7)
+        get_pixel(Im, X + Dx, Y + Dy) == Color
+    end.
+
+get_goal(Im, Board) =>
+    not between_levels(Im),
+    Board = new_array(6, 10),
+    R = 0,
+    foreach (Y in 160..8..200)
+        R := R + 1,
+        C = 0,
+        foreach (X in 54..8..126)
+            C := C + 1,
+            P = get_pixel(Im, X, Y),
+            if P != get_pixel(Im, X - 3, Y + 6), V = color_tile(P) then
+                Board[R, C] := V
+            else
+                Board[R, C] := '.'
+            end
+        end
+    end.
+
+get_position()=Pos =>
+    End = 0,
+    CurrR = 0, CurrC = 0,
+    while (End == 0)
+        save_screenshot(ppm_name("_tmp")),
+        Im = load_ppm(ppm_name("_tmp")),
+        foreach (Y in 40..16..120, X in 48..16..192, End == 0)
+            Color = get_pixel(Im, X, Y),
+            CurrR := (Y - 40) // 16 + 1,
+            CurrC := (X - 48) // 16 + 1,
+            End := 1,
+            foreach (Dx in 0..1, Dy in [2, 3, 4, 6, 7, 8])
+                if get_pixel(Im, X + Dx, Y + Dy) != Color then
+                     End := 0
+                end
+            end
+        end
+    end,
+    Pos = (CurrR, CurrC).
+
+do_moves(Plan) =>
+    (CurrR, CurrC) = (1, 1),
+    foreach ((R, C) in Plan)
+        End := 0,
+        while (End == 0)
+            Keys = "",
+            if R > CurrR then
+                foreach (_ in 1..R-CurrR)
+                    Keys := Keys ++ "a"
+                end
+            else
+                foreach (_ in 1..CurrR-R)
+                    Keys := Keys ++ "q"
+                end
+            end,
+            if C > CurrC then
+                foreach (_ in 1..C-CurrC)
+                    Keys := Keys ++ "p"
+                end
+            else
+                foreach (_ in 1..CurrC-C)
+                    Keys := Keys ++ "o"
+                end
+            end,
+            text(Keys),
+            (TmpR, TmpC) = get_position(),
+            CurrR := TmpR, CurrC := TmpC,
+            if (R, C) == (CurrR, CurrC) then
+                key("space"),
+                End := 1
+            end
+        end
+    end.
+
+do_level(Level) =>
+    if Level > 1 then
+        get_goal(load_ppm(ppm_name(Level - 1)), PrevBoard)
+    else
+        PrevBoard = []
+    end,
+    End = 0,
+    CurrBoard = [],
+    while (CurrBoard == [])
+        save_screenshot(ppm_name(Level)),
+        if get_goal(load_ppm(ppm_name(Level)), Board), Board != PrevBoard then
+            CurrBoard := Board
+        end,
+        sleep(0.5),
+    end,
+    plan_unbounded(CurrBoard, PlanRev),
+    Plan = reverse(PlanRev),
+    do_moves(Plan).
+
+main =>
+    cl('logo.pi'),
+    load_game,
+    start_game,
+    foreach (Level in 1..6)
+        do_level(Level)
+    end,
+    exit_game.
