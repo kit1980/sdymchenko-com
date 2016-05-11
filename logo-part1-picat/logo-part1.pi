@@ -45,9 +45,9 @@ start_game =>
     key("2"),
     key("5"),
 
-    key("6"),
-    sleep(1),
-    text("love"),
+    % key("6"),
+    % sleep(1),
+    % text("love"),
 
     sleep(1),
     key("KP_Enter"),
@@ -170,7 +170,7 @@ main =>
     cl('logo.pi'),
     load_game,
     start_game,
-    foreach (Level in 1..6)
+    foreach (Level in 1..100)
         do_level(Level)
     end,
     exit_game.
