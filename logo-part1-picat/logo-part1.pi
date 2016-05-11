@@ -15,12 +15,12 @@ key(K) =>
 text(T) =>
     _ = command("xdotool type --delay 430 " ++ T).
 
+
 sleep(Time) =>
     _ = command("sleep " ++ to_string(Time)).
 
 ppm_name(Level)=PPM =>
     PPM = "/tmp/logo" ++ to_string(Level) ++ ".ppm".
-
 
 load_ppm(PPM)=Im =>
     File = open(PPM),
