@@ -11,9 +11,9 @@ load_game =>
     % to convert FMF to MPEG from command-line: fmfconv -p dvd logo-part1.fmf logo-part1.mpeg
 
 key(K) =>
-    _ = command("xdotool key --delay 290 " ++ K).
+    _ = command("xdotool key --delay 300 " ++ K).
 text(T) =>
-    _ = command("xdotool type --delay 430 " ++ T).
+    _ = command("xdotool type --delay 400 " ++ T).
 
 
 sleep(Time) =>
@@ -160,7 +160,7 @@ do_level(Level) =>
         if get_goal(load_ppm(ppm_name(Level)), Board), Board != PrevBoard then
             CurrBoard := Board
         end,
-        sleep(0.5),
+        sleep(0.2),
     end,
     plan_unbounded(CurrBoard, PlanRev),
     Plan = reverse(PlanRev),
