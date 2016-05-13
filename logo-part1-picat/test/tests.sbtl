@@ -1,18 +1,18 @@
-picat logo-part1.pi
+picat logo.pi
 
 <
 2 2
 1.
 ..
 >
-space
+1 1
 
 <
 2 2
 .1
 ..
 >
-p space
+1 2
 
 <
 6 10
@@ -23,7 +23,11 @@ p space
 ..........
 ..........
 >
-a a p p p space a p space q q space a p space o space
+4 5
+3 6
+3 4
+2 5
+3 5
 
 <
 6 10
@@ -34,4 +38,16 @@ a a p p p space a p space q q space a p space o space
 ....111...
 .....1....
 >
-x
+5 6
+6 6
+4 7
+5 7
+4 5
+5 5
+4 8
+3 6
+4 6
+4 4
+3 7
+3 5
+2 6

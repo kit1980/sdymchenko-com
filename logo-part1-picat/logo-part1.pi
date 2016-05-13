@@ -1,3 +1,14 @@
+% Solver for ZX Spectrum game Logo: Part 1
+% http://www.worldofspectrum.org/infoseekid.cgi?id=0011860
+% Uses logo.pi to find the plan for each level.
+%
+% Author: Sergey Dymchenko <kit1980@gmail.com>
+%
+% Picat 1.9#2 - http://picat-lang.org
+% Fuse 1.1.1 - http://fuse-emulator.sourceforge.net/
+% xdotool version 3.20150503.1 - http://www.semicomplete.com/projects/xdotool/
+% ImageMagick 6.7.7-10  http://www.imagemagick.org
+
 import planner.
 import util. % for split
 
