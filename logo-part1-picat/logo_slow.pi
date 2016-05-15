@@ -1,0 +1,54 @@
+% SLOW INEFFICIENT version of logo.pi
+
+import planner.
+import util.
+
+next('.') = '.'.
+next('1') = '2'.
+next('2') = '3'.
+next('3') = '4'.
+next('4') = '1'.
+
+final(Board) =>
+    target(Target),
+    Board == Target.
+
+action(Board, NewBoard, Action, Cost) =>
+    MaxR = Board.length(),
+    MaxC = Board[1].length(),
+    between(1, MaxR, R),
+    between(1, MaxC, C),
+    Board[R, C] == '.',
+    target(Target),
+    Target[R, C] != '.',
+    NewBoard = copy_term(Board),
+    NewBoard[R, C] := '1',
+    foreach ((DR, DC) in [(0, 1), (0, -1), (1, 0), (-1, 0)])
+        NR = R + DR, NC = C + DC,
+        if (NR > 0, NR <= MaxR, NC > 0, NC <= MaxC) then
+            NewBoard[NR, NC] := next(NewBoard[NR, NC])
+        end
+    end,
+    Action = (R, C),
+    Cost = 1.
+
+main =>
+    MaxR = read_int(), MaxC = read_int(),
+    Board = new_array(MaxR, MaxC),
+    foreach (R in 1..MaxR)
+        Line = read_line(),
+        foreach (C in 1..MaxC)
+           Board[R, C] = Line[C]
+        end
+    end,
+    cl_facts([$target(Board)]),
+    EmptyBoard = new_array(MaxR, MaxC),
+    foreach (R in 1..MaxR)
+        foreach (C in 1..MaxC)
+           EmptyBoard[R, C] = '.'
+        end
+    end,
+    plan_unbounded(EmptyBoard, Plan),
+    foreach ((R, C) in Plan)
+        printf("%d %d%n", R, C)
+    end.
